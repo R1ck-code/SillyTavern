@@ -1224,7 +1224,7 @@ function showMediaDisplayReloadPrompt() {
     );
 }
 
-function applyTheme(name) {
+export function applyTheme(name) {
     const theme = themes.find(x => x.name == name);
 
     if (!theme) {

@@ -2,8 +2,28 @@ import { registerDebugFunction } from './power-user.js';
 import { updateSecretDisplay } from './secrets.js';
 
 const storageKey = 'language';
+/** Fork default: Simplified Chinese when the user has no saved language preference. */
+export const DEFAULT_UI_LOCALE = 'zh-cn';
+
+/**
+ * Resolve the UI locale.
+ * A stored localStorage preference is always honored; only the empty/absent case
+ * falls back to zh-cn. Browser navigator.language is intentionally not used so
+ * new users and "Default" get Simplified Chinese.
+ * @param {string|null|undefined} storedLanguage Value from localStorage `language`
+ * @param {string} [fallback=DEFAULT_UI_LOCALE]
+ * @returns {string}
+ */
+export function resolveUiLocale(storedLanguage, fallback = DEFAULT_UI_LOCALE) {
+    const stored = String(storedLanguage ?? '').trim();
+    if (stored) {
+        return stored.toLowerCase();
+    }
+    return fallback;
+}
+
 const overrideLanguage = localStorage.getItem(storageKey);
-const localeFile = String(overrideLanguage || navigator.language || navigator.userLanguage || 'en').toLowerCase();
+const localeFile = resolveUiLocale(overrideLanguage);
 var langs;
 // Don't change to let/const! It will break module loading.
 // eslint-disable-next-line prefer-const
@@ -269,7 +289,7 @@ function addLanguagesToDropdown() {
         uiLanguageSelects.append(option);
     }
 
-    const selectedLanguage = localStorage.getItem(storageKey);
+    const selectedLanguage = localStorage.getItem(storageKey) || localeFile;
     if (selectedLanguage) {
         uiLanguageSelects.val(selectedLanguage);
     }

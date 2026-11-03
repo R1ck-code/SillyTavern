@@ -7,20 +7,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="darkreader-lock">
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#333">
+    <meta name="theme-color" content="#212121">
+    <script>
+        (function () {
+            try {
+                var mode = localStorage.getItem('st-appearance-mode') || 'system';
+                var resolved = (mode === 'light' || mode === 'dark')
+                    ? mode
+                    : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+                document.documentElement.dataset.appearance = resolved;
+                document.documentElement.dataset.appearanceMode = mode;
+                document.documentElement.style.backgroundColor = resolved === 'light' ? '#f7f7f4' : '#212121';
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
     <style>
         /* Put critical CSS here. The rest should go in stylesheets. */
         body {
-            background-color: rgb(36, 36, 37);
+            background-color: rgb(33, 33, 33);
+        }
+        html[data-appearance="light"] body {
+            background-color: #f7f7f4;
         }
     </style>
     <link rel="preload" as="style" href="style.css">
     <link rel="manifest" crossorigin="use-credentials" href="manifest.json">
-    <link href="webfonts/NotoSans/stylesheet.css" rel="stylesheet">
-    <link href="webfonts/NotoSansMono/stylesheet.css" rel="stylesheet">
     <link href="css/fontawesome.min.css" rel="stylesheet">
     <link href="css/solid.min.css" rel="stylesheet">
     <link href="css/brands.min.css" rel="stylesheet">
@@ -42,6 +57,8 @@
     <link rel="stylesheet" type="text/css" href="css/extensions-panel.css">
     <link rel="stylesheet" type="text/css" href="css/select2-overrides.css">
     <link rel="stylesheet" type="text/css" href="css/mobile-styles.css">
+    <link rel="stylesheet" type="text/css" href="css/conversation-theme.css">
+    <link rel="stylesheet" type="text/css" href="css/mobile-chat-theme.css">
     <link rel="stylesheet" type="text/css" href="css/macros.css">
     <link rel="stylesheet" type="text/css" href="css/user.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -4875,6 +4892,25 @@
                 </div>
             </div>
         </div>
+        <div id="appearance-toggle-wrap">
+            <button type="button" id="appearance-toggle-button" class="drawer-icon interactable" title="外观：浅色 / 深色 / 跟随系统" data-i18n="[title]Appearance: light, dark, or match system" aria-haspopup="menu" aria-expanded="false">
+                <i id="appearance-toggle-icon" class="fa-solid fa-circle-half-stroke fa-fw"></i>
+            </button>
+            <div id="appearance-menu" class="appearance-menu hidden" role="menu">
+                <button type="button" data-appearance="light" role="menuitem">
+                    <i class="fa-solid fa-sun fa-fw"></i>
+                    <span data-i18n="Light mode">浅色</span>
+                </button>
+                <button type="button" data-appearance="dark" role="menuitem">
+                    <i class="fa-solid fa-moon fa-fw"></i>
+                    <span data-i18n="Dark mode">深色</span>
+                </button>
+                <button type="button" data-appearance="system" role="menuitem">
+                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                    <span data-i18n="Match system">跟随系统</span>
+                </button>
+            </div>
+        </div>
         <div id="user-settings-button" class="drawer">
             <div class="drawer-toggle">
                 <div class="drawer-icon fa-solid fa-user-cog fa-fw closedIcon" title="User Settings" data-i18n="[title]User Settings"></div>
@@ -4938,6 +4974,14 @@
                                 </div>
                                 <input type="file" id="ui_preset_import_file" accept=".json" hidden>
                             </h4>
+                            <div id="appearance-settings-block" class="flex-container alignItemsBaseline">
+                                <span data-i18n="Appearance">外观:</span>
+                                <select id="appearance_mode_select" class="widthNatural flex1 margin0 text_pole">
+                                    <option value="light" data-i18n="Light mode">浅色</option>
+                                    <option value="dark" data-i18n="Dark mode">深色</option>
+                                    <option value="system" data-i18n="Match system">跟随系统</option>
+                                </select>
+                            </div>
                             <div class="flex-container flexnowrap alignitemscenter">
                                 <select id="themes" class="margin0">
                                 </select>
@@ -7247,6 +7291,10 @@
                     <i class="ch_fav_icon fa-solid fa-star"></i>
                     <input class="ch_fav" value="" hidden />
                     <div class="ch_description"></div>
+                    <div class="ch_worldbooks" title="">
+                        <i class="fa-solid fa-book-atlas fa-fw" aria-hidden="true"></i>
+                        <span class="ch_worldbook_list"></span>
+                    </div>
                     <div class="tags tags_inline"></div>
                 </div>
             </div>

@@ -1,0 +1,243 @@
+/*
+ * First-pass mobile chat surface (iPhone / narrow Safari / Add to Home Screen).
+ * Goal: ChatGPT/Claude-like — large type, light bubbles, chat-first, drawers for chrome.
+ * Desktop (>=769px) is left to existing styles.
+ */
+
+@media screen and (max-width: 768px) {
+    :root {
+        --fontScale: 1.08;
+        --mes-right-spacing: 8px;
+        --avatar-base-height: 36px;
+        --avatar-base-width: 36px;
+        --sat: env(safe-area-inset-top, 0px);
+        --sab: env(safe-area-inset-bottom, 0px);
+        --sal: env(safe-area-inset-left, 0px);
+        --sar: env(safe-area-inset-right, 0px);
+    }
+
+    html,
+    body {
+        overflow: hidden;
+        overscroll-behavior: none;
+    }
+
+    #top-bar {
+        height: calc(var(--bottomFormBlockSize) + var(--sat));
+        padding-top: var(--sat);
+        padding-left: var(--sal);
+        padding-right: var(--sar);
+        width: 100vw;
+        width: 100dvw;
+        box-sizing: border-box;
+        background-color: color-mix(in srgb, var(--SmartThemeBlurTintColor) 88%, transparent);
+        border-bottom: none;
+        box-shadow: none;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+
+    #top-settings-holder {
+        height: calc(var(--topBarBlockSize) + var(--sat));
+        padding-top: var(--sat);
+        padding-left: var(--sal);
+        padding-right: var(--sar);
+        width: 100vw;
+        width: 100dvw;
+        box-sizing: border-box;
+        background-color: color-mix(in srgb, var(--SmartThemeBlurTintColor) 88%, transparent);
+    }
+
+    #sheld {
+        top: calc(var(--topBarBlockSize) + var(--sat));
+        height: calc(100dvh - var(--topBarBlockSize) - var(--sat));
+        max-height: calc(100dvh - var(--topBarBlockSize) - var(--sat));
+        width: 100dvw !important;
+        max-width: 100dvw;
+        left: 0 !important;
+        right: 0;
+        padding-left: var(--sal);
+        padding-right: var(--sar);
+        padding-bottom: 0;
+    }
+
+    #chat {
+        border: none !important;
+        background-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        text-shadow: none;
+        padding: 8px 12px 18px;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+    }
+
+    #chat .mes {
+        padding: 6px 2px 10px;
+        margin-bottom: 2px;
+        border: none;
+        background-color: transparent;
+    }
+
+    #chat .mes .mes_text {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        max-width: 100%;
+    }
+
+    #chat .mes.smallSysMes .mes_text {
+        padding: 4px 8px;
+        font-size: 0.85rem;
+    }
+
+    body.documentstyle #chat .mes .mes_text {
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    #chat .mes .mes_block .ch_name {
+        opacity: 0.72;
+        font-size: 0.85rem;
+        padding-left: 4px;
+    }
+
+    #form_sheld {
+        padding: 0 10px calc(8px + var(--sab));
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #send_form {
+        border: none;
+        border-radius: 22px;
+        margin: 0;
+        padding: 4px 8px;
+        min-height: 48px;
+        max-width: 100%;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
+        background-color: color-mix(in srgb, var(--SmartThemeBlurTintColor) 92%, transparent);
+    }
+
+    #send_form.compact {
+        border-radius: 22px;
+    }
+
+    #send_textarea {
+        font-size: 16px;
+        line-height: 1.45;
+        min-height: 44px;
+        padding: 10px 8px;
+        text-align: left;
+        text-shadow: none;
+    }
+
+    #send_textarea::placeholder {
+        text-align: left !important;
+    }
+
+    #leftSendForm,
+    #rightSendForm {
+        width: auto;
+        min-width: 44px;
+        height: auto;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    #leftSendForm > div,
+    #rightSendForm > div:not(.mes_stop) {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    #nonQRFormItems {
+        column-gap: 2px;
+        align-items: flex-end;
+    }
+
+    /* Settings / character list already live in drawers; make them feel like sheets. */
+    #left-nav-panel,
+    #right-nav-panel,
+    .drawer-content.openDrawer {
+        border: none !important;
+        border-radius: 18px 18px 0 0 !important;
+        box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.28);
+        padding-left: max(8px, var(--sal));
+        padding-right: max(8px, var(--sar));
+        padding-bottom: max(12px, var(--sab));
+    }
+
+    #right-nav-panel,
+    #left-nav-panel {
+        top: calc(var(--topBarBlockSize) + var(--sat)) !important;
+        height: calc(100dvh - var(--topBarBlockSize) - var(--sat)) !important;
+        max-height: calc(100dvh - var(--topBarBlockSize) - var(--sat));
+    }
+
+    .drawer-icon {
+        min-width: 44px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mes_buttons {
+        font-size: 1.1rem;
+        gap: 6px;
+    }
+
+    #chat .mes .avatar img {
+        box-shadow: none;
+        border: none;
+    }
+
+    .welcomePanel {
+        padding: 16px 8px 24px;
+    }
+
+    .welcomePanel .welcomeHeaderVersionDisplay {
+        font-size: 1.15rem;
+    }
+}
+
+/* Landscape phones: keep the composer usable and chat readable. */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    :root {
+        --fontScale: 1;
+    }
+
+    #sheld {
+        top: calc(var(--topBarBlockSize) + var(--sat));
+        height: calc(100dvh - var(--topBarBlockSize) - var(--sat));
+    }
+
+    #chat {
+        padding-top: 4px;
+        padding-bottom: 8px;
+    }
+
+    #chat .mes .mes_text {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+
+    #form_sheld {
+        padding-bottom: max(4px, var(--sab));
+    }
+
+    #send_textarea {
+        min-height: 40px;
+        padding: 8px;
+    }
+}
+
+/* iPhone PWA / Safari: extra home-indicator room when installed. */
+@media screen and (max-width: 768px) {
+    body.PWA #form_sheld {
+        padding-bottom: max(12px, var(--sab));
+    }
+}

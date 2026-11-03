@@ -10,6 +10,8 @@ import {
     tryParse,
     clientRelativePath,
     getUniqueName,
+    getUniqueCopyName,
+    applyUniqueCopyName,
     removeFileExtension,
     removeColorFormatting,
     getSeparator,
@@ -209,6 +211,49 @@ describe('getUniqueName', () => {
     test('should check basename first when startIndex is 0', () => {
         const result = getUniqueName('Free', () => false, { startIndex: 0 });
         expect(result).toBe('Free');
+    });
+});
+
+describe('getUniqueCopyName', () => {
+    test('first copy appends 副本', () => {
+        expect(getUniqueCopyName('Alice', new Set(['Alice']))).toBe('Alice 副本');
+    });
+
+    test('second copy uses (2) when 副本 is taken', () => {
+        expect(getUniqueCopyName('Alice', new Set(['Alice', 'Alice 副本']))).toBe('Alice 副本 (2)');
+    });
+
+    test('copying a copy stays in the same name family', () => {
+        expect(getUniqueCopyName('Alice 副本', new Set(['Alice', 'Alice 副本']))).toBe('Alice 副本 (2)');
+        expect(getUniqueCopyName('Alice 副本 (2)', new Set(['Alice', 'Alice 副本', 'Alice 副本 (2)']))).toBe('Alice 副本 (3)');
+    });
+
+    test('empty name falls back to Character 副本', () => {
+        expect(getUniqueCopyName('', [])).toBe('Character 副本');
+    });
+
+    test('every copy gets a new name and never collides', () => {
+        const taken = new Set(['Seraphina']);
+        const first = getUniqueCopyName('Seraphina', taken);
+        taken.add(first);
+        const second = getUniqueCopyName('Seraphina', taken);
+        taken.add(second);
+        const third = getUniqueCopyName(first, taken);
+        expect(first).toBe('Seraphina 副本');
+        expect(second).toBe('Seraphina 副本 (2)');
+        expect(third).toBe('Seraphina 副本 (3)');
+        expect(new Set([first, second, third]).size).toBe(3);
+    });
+});
+
+describe('applyUniqueCopyName', () => {
+    test('updates both V1 name and V2 data.name', () => {
+        const card = { name: 'Alice', data: { name: 'Alice', description: 'x' } };
+        const next = applyUniqueCopyName(card, new Set(['Alice']));
+        expect(next).toBe('Alice 副本');
+        expect(card.name).toBe('Alice 副本');
+        expect(card.data.name).toBe('Alice 副本');
+        expect(card.data.description).toBe('x');
     });
 });
 

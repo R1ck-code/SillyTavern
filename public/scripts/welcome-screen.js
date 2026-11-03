@@ -331,7 +331,11 @@ async function sendWelcomePanel(chats, expand = false) {
         fragment.querySelectorAll('.welcomePanel').forEach((root) => {
             const recentHiddenClass = 'recentHidden';
             const recentHiddenKey = 'WelcomePage_RecentChatsHidden';
-            if (accountStorage.getItem(recentHiddenKey) === 'true') {
+            // Default to a ChatGPT-like empty start; only reopen if the user asked.
+            if (expand) {
+                root.classList.remove(recentHiddenClass);
+                accountStorage.setItem(recentHiddenKey, 'false');
+            } else if (accountStorage.getItem(recentHiddenKey) !== 'false') {
                 root.classList.add(recentHiddenClass);
             }
             root.querySelectorAll('.showRecentChats').forEach((button) => {

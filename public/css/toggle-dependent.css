@@ -143,6 +143,28 @@ body.charListGrid #rm_print_characters_block .bogus_folder_select_back .bogus_fo
     display: none;
 }
 
+body.charListGrid #rm_print_characters_block .ch_worldbooks {
+    display: flex;
+    justify-content: center;
+    max-width: 100px;
+    margin-top: 2px;
+}
+
+body.charListGrid #rm_print_characters_block .ch_worldbooks > i {
+    display: none;
+}
+
+body.charListGrid #rm_print_characters_block .ch_worldbook_list {
+    justify-content: center;
+    max-height: 2.8em;
+}
+
+body.charListGrid #rm_print_characters_block .ch_worldbook {
+    max-width: 96px;
+    font-size: calc(var(--mainFontSize) * 0.68);
+    padding: 0 4px;
+}
+
 body.charListGrid #rm_print_characters_block .bogus_folder_select_back .avatar {
     display: flex !important;
 }

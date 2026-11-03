@@ -14,7 +14,7 @@ import storage from 'node-persist';
 
 import { AVATAR_WIDTH, AVATAR_HEIGHT, DEFAULT_AVATAR_PATH } from '../constants.js';
 import { default as validateAvatarUrlMiddleware, getFileNameValidationFunction, forbiddenRegExp } from '../middleware/validateFileName.js';
-import { deepMerge, humanizedDateTime, tryParse, MemoryLimitedMap, getConfigValue, mutateJsonString, clientRelativePath, getUniqueName, sanitizeSafeCharacterReplacements, getArrayBufferSlice } from '../util.js';
+import { deepMerge, humanizedDateTime, tryParse, MemoryLimitedMap, getConfigValue, mutateJsonString, clientRelativePath, getUniqueName, applyUniqueCopyName, sanitizeSafeCharacterReplacements, getArrayBufferSlice } from '../util.js';
 import { TavernCardValidator } from '../validator/TavernCardValidator.js';
 import { parse, read, write } from '../character-card-parser.js';
 import { readWorldInfoFile } from './worldinfo.js';
@@ -1598,6 +1598,60 @@ router.post('/import', async function (request, response) {
     }
 });
 
+/**
+ * Collect display names of all character cards in the user's characters directory.
+ * @param {import('../users.js').UserDirectoryList} directories User directories
+ * @returns {Promise<Set<string>>}
+ */
+async function collectCharacterDisplayNames(directories) {
+    const names = new Set();
+    const files = fs.readdirSync(directories.characters).filter(file => file.endsWith('.png'));
+    for (const file of files) {
+        try {
+            const raw = await readCharacterData(path.join(directories.characters, file));
+            if (!raw) {
+                continue;
+            }
+            const card = JSON.parse(raw);
+            const name = card?.data?.name || card?.name;
+            if (name) {
+                names.add(name);
+            }
+        } catch (error) {
+            console.warn('Failed to read character name for uniqueness check:', file, error);
+        }
+    }
+    return names;
+}
+
+/**
+ * Rewrite a just-copied character card so its display name is unique (e.g. "Alice 副本").
+ * @param {string} newFilename Full path to the duplicated PNG
+ * @param {import('express').Request} request Express request
+ * @returns {Promise<void>}
+ */
+async function renameDuplicatedCharacterCard(newFilename, request) {
+    const raw = await readCharacterData(newFilename);
+    if (!raw) {
+        console.warn('Duplicated character card could not be read for rename:', newFilename);
+        return;
+    }
+
+    let card;
+    try {
+        card = JSON.parse(raw);
+    } catch (error) {
+        console.warn('Duplicated character card JSON is invalid, leaving name unchanged:', newFilename, error);
+        return;
+    }
+
+    const existingNames = await collectCharacterDisplayNames(request.user.directories);
+    applyUniqueCopyName(card, existingNames);
+
+    const targetImg = path.parse(newFilename).name;
+    await writeCharacterData(newFilename, JSON.stringify(card), targetImg, request);
+}
+
 router.post('/duplicate', validateAvatarUrlMiddleware, async function (request, response) {
     try {
         if (!request.body.avatar_url) {
@@ -1636,6 +1690,11 @@ router.post('/duplicate', validateAvatarUrlMiddleware, async function (request, 
 
         fs.copyFileSync(filename, newFilename);
         console.info(`${filename} was copied to ${newFilename}`);
+
+        // File copy only changes the PNG filename (Alice.png -> Alice_1.png).
+        // The card's display name is unchanged unless we rewrite it here.
+        await renameDuplicatedCharacterCard(newFilename, request);
+
         response.send({ path: path.parse(newFilename).base });
     } catch (error) {
         console.error(error);

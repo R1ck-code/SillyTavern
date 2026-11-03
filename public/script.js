@@ -49,6 +49,7 @@ import {
     initWorldInfo,
     charUpdatePrimaryWorld,
     charSetAuxWorlds,
+    getCharacterBoundWorldNames,
 } from './scripts/world-info.js';
 
 import {
@@ -231,6 +232,7 @@ import {
     getInstructStoppingSequences,
 } from './scripts/instruct-mode.js';
 import { initLocales, t } from './scripts/i18n.js';
+import { initAppearance, applyAppearance, getStoredAppearanceMode } from './scripts/appearance.js';
 import { getFriendlyTokenizerName, getTokenCount, getTokenCountAsync, initTokenizers, saveTokenCache } from './scripts/tokenizers.js';
 import {
     user_avatar,
@@ -736,6 +738,7 @@ async function firstLoadInit() {
     await initSecrets();
     await readSecretState();
     await initLocales();
+    initAppearance();
     initChatUtilities();
     initDefaultSlashCommands();
     initTextGenModels();
@@ -972,6 +975,25 @@ function getCharacterBlock(item, id) {
         template.find('.character_version').text(auxFieldValue);
     } else {
         template.find('.character_version').hide();
+    }
+
+    const boundWorlds = getCharacterBoundWorldNames(item);
+    const worldbooksEl = template.find('.ch_worldbooks');
+    if (boundWorlds.length) {
+        const label = t`World Info`;
+        worldbooksEl.attr('title', `${label}: ${boundWorlds.join(', ')}`);
+        const listEl = worldbooksEl.find('.ch_worldbook_list');
+        const maxVisible = 3;
+        boundWorlds.slice(0, maxVisible).forEach((name) => {
+            $('<span class="ch_worldbook"></span>').text(name).appendTo(listEl);
+        });
+        if (boundWorlds.length > maxVisible) {
+            $('<span class="ch_worldbook ch_worldbook_more"></span>').text(`+${boundWorlds.length - maxVisible}`).appendTo(listEl);
+        }
+        const avatarTitle = template.find('.avatar').attr('title') || '';
+        template.find('.avatar').attr('title', `${avatarTitle}\n${label}: ${boundWorlds.join(', ')}`);
+    } else {
+        worldbooksEl.remove();
     }
 
     // Display inline tags
@@ -7968,6 +7990,7 @@ export async function getSettings(initLoaderHandle = null) {
 
         // Apply theme toggles from power user settings
         applyPowerUserSettings();
+        applyAppearance(getStoredAppearanceMode(), { persist: false, applyBuiltinTheme: false });
 
         // Load character tags
         loadTagsSettings(settings);
