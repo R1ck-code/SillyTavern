@@ -53,6 +53,7 @@ html[data-appearance="light"] {
     /* !important beats UI-theme inline vars so 外观 and 对话 cannot fight. */
     --SmartThemeBodyColor: #1F1E1D !important;
     --SmartThemeEmColor: #1F1E1D !important;
+    /* Accent chrome. Chat <q> text is forced to #1F1E1D below (terracotta is 3.80:1). */
     --SmartThemeQuoteColor: #C15F3C !important;
     --SmartThemeUnderlineColor: #C15F3C !important;
     --SmartThemeBlurTintColor: #F4F3EE !important;
@@ -155,6 +156,57 @@ html[data-appearance] #chat .mes .mes_text {
     letter-spacing: -0.011em;
     padding: 2px 4px;
     max-width: 46rem;
+}
+
+/*
+ * Chat copy is forced here, not only via SmartTheme* variables.
+ * Saved UI themes write those variables inline, and .mes_text em / q
+ * read them, so a cream page can still show gray narration and orange quotes.
+ * #C15F3C on #F4F3EE is 3.80:1 (below WCAG AA 4.5), so light dialogue uses
+ * body #1F1E1D (14.98:1). #C15F3C stays the accent for links and chrome.
+ * #B1ADA1 (2.02:1 on the page) is a border swatch and is not used for chat text.
+ */
+html[data-appearance="light"] #chat .mes .mes_text,
+html[data-appearance="light"] #chat .mes .mes_text p,
+html[data-appearance="light"] #chat .mes .mes_text li,
+html[data-appearance="light"] #chat .mes .mes_text em,
+html[data-appearance="light"] #chat .mes .mes_text i,
+html[data-appearance="light"] #chat .mes .mes_text strong,
+html[data-appearance="light"] #chat .mes .mes_text b,
+html[data-appearance="light"] #chat .mes .mes_text u,
+html[data-appearance="light"] #chat .mes .mes_text q,
+html[data-appearance="light"] #chat .mes .mes_text q em,
+html[data-appearance="light"] #chat .mes .mes_text q i,
+html[data-appearance="light"] #chat .mes .mes_block .ch_name,
+html[data-appearance="light"] #chat .mes.smallSysMes .mes_text {
+    color: #1F1E1D !important;
+}
+
+html[data-appearance="dark"] #chat .mes .mes_text,
+html[data-appearance="dark"] #chat .mes .mes_text p,
+html[data-appearance="dark"] #chat .mes .mes_text li,
+html[data-appearance="dark"] #chat .mes .mes_text em,
+html[data-appearance="dark"] #chat .mes .mes_text i,
+html[data-appearance="dark"] #chat .mes .mes_text strong,
+html[data-appearance="dark"] #chat .mes .mes_text b,
+html[data-appearance="dark"] #chat .mes .mes_text u,
+html[data-appearance="dark"] #chat .mes .mes_text q em,
+html[data-appearance="dark"] #chat .mes .mes_text q i,
+html[data-appearance="dark"] #chat .mes .mes_block .ch_name,
+html[data-appearance="dark"] #chat .mes.smallSysMes .mes_text {
+    color: #ececec !important;
+}
+
+html[data-appearance="dark"] #chat .mes .mes_text q {
+    color: #d4a85a !important;
+}
+
+html[data-appearance="light"] #chat .mes .mes_text span:not(pre *, code *) {
+    color: #1F1E1D !important;
+}
+
+html[data-appearance="dark"] #chat .mes .mes_text span:not(pre *, code *) {
+    color: #ececec !important;
 }
 
 html[data-appearance] #chat .mes[is_user="true"] .mes_text {

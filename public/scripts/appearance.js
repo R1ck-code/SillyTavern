@@ -28,6 +28,7 @@ const TOKEN_SETS = {
     light: {
         '--SmartThemeBodyColor': '#1F1E1D',
         '--SmartThemeEmColor': '#1F1E1D',
+        /* Accent chrome only. Chat dialogue is forced to #1F1E1D in conversation-theme.css. */
         '--SmartThemeQuoteColor': '#C15F3C',
         '--SmartThemeBlurTintColor': '#F4F3EE',
         '--SmartThemeChatTintColor': '#FFFFFF',
@@ -106,6 +107,8 @@ function syncToggleUi(mode, resolved) {
     }
 }
 
+let syncingBuiltinTheme = false;
+
 function syncBuiltinTheme(resolved) {
     const name = APPEARANCE_THEMES[resolved];
     const select = document.getElementById('themes');
@@ -115,8 +118,10 @@ function syncBuiltinTheme(resolved) {
     if (select.value === name) {
         return;
     }
+    syncingBuiltinTheme = true;
     select.value = name;
     select.dispatchEvent(new Event('change', { bubbles: true }));
+    syncingBuiltinTheme = false;
 }
 
 /**
@@ -147,13 +152,38 @@ export function applyAppearance(mode = getStoredAppearanceMode(), { persist = tr
     }
 
     // Color pickers emit `change` after load/theme swap; re-assert once they settle.
+    reassertTokensSoon(resolved);
+}
+
+function reassertTokensSoon(resolved) {
+    const run = () => {
+        const current = document.documentElement.dataset.appearance;
+        if (current === 'light' || current === 'dark') {
+            applyColorTokens(current);
+            return;
+        }
+        if (resolved === 'light' || resolved === 'dark') {
+            applyColorTokens(resolved);
+        }
+    };
     clearTimeout(applyAppearance._tokenTimer);
-    applyAppearance._tokenTimer = setTimeout(() => applyColorTokens(resolved), 0);
+    applyAppearance._tokenTimer = setTimeout(run, 0);
+    clearTimeout(applyAppearance._tokenTimerLate);
+    applyAppearance._tokenTimerLate = setTimeout(run, 50);
+}
+
+/**
+ * One tap always flips the color the user is looking at.
+ * system→light is a no-op when the OS is already light, so do not cycle through system here.
+ * @param {'light'|'dark'} resolved
+ * @returns {'light'|'dark'}
+ */
+export function toggledAppearance(resolved) {
+    return resolved === 'light' ? 'dark' : 'light';
 }
 
 function cycleAppearance() {
-    const current = getStoredAppearanceMode();
-    const next = current === 'system' ? 'light' : current === 'light' ? 'dark' : 'system';
+    const next = toggledAppearance(resolveAppearance(getStoredAppearanceMode()));
     applyAppearance(next, { persist: true, applyBuiltinTheme: true });
 }
 
@@ -173,9 +203,32 @@ export function initAppearance() {
     const button = document.getElementById('appearance-toggle-button');
     const menu = document.getElementById('appearance-menu');
     if (button && menu) {
+        let longPressTimer = 0;
+        let longPressAt = 0;
+        let ignoreNextClick = false;
+        const cancelLongPress = () => window.clearTimeout(longPressTimer);
+        button.addEventListener('pointerdown', (event) => {
+            if (event.pointerType === 'mouse') {
+                return;
+            }
+            ignoreNextClick = false;
+            cancelLongPress();
+            longPressTimer = window.setTimeout(() => {
+                longPressAt = Date.now();
+                ignoreNextClick = true;
+                setMenuOpen(true);
+            }, 500);
+        });
+        button.addEventListener('pointerup', cancelLongPress);
+        button.addEventListener('pointercancel', cancelLongPress);
+        button.addEventListener('pointerleave', cancelLongPress);
         button.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
+            if (ignoreNextClick) {
+                ignoreNextClick = false;
+                return;
+            }
             if (event.shiftKey || event.altKey) {
                 setMenuOpen(menu.classList.contains('hidden'));
                 return;
@@ -184,6 +237,11 @@ export function initAppearance() {
         });
         button.addEventListener('contextmenu', (event) => {
             event.preventDefault();
+            // A touch long-press also fires contextmenu; don't toggle the menu shut.
+            if (Date.now() - longPressAt < 800) {
+                setMenuOpen(true);
+                return;
+            }
             setMenuOpen(menu.classList.contains('hidden'));
         });
         menu.querySelectorAll('[data-appearance]').forEach(el => {
@@ -210,6 +268,11 @@ export function initAppearance() {
     }
 
     $('#themes').on('change.appearance', function () {
+        if (syncingBuiltinTheme) {
+            // This change came from syncBuiltinTheme, not from the user picking a theme.
+            reassertTokensSoon(resolveAppearance());
+            return;
+        }
         const selected = String($(this).val());
         if (selected === APPEARANCE_THEMES.light) {
             applyAppearance('light', { persist: true, applyBuiltinTheme: false });
@@ -220,6 +283,24 @@ export function initAppearance() {
             applyAppearance(getStoredAppearanceMode(), { persist: false, applyBuiltinTheme: false });
         }
     });
+
+    // Theme color pickers write inline SmartTheme vars after applyTheme. Put tokens back.
+    for (const id of [
+        'main-text-color-picker',
+        'italics-color-picker',
+        'underline-color-picker',
+        'quote-color-picker',
+        'blur-tint-color-picker',
+        'chat-tint-color-picker',
+        'user-mes-blur-tint-color-picker',
+        'bot-mes-blur-tint-color-picker',
+        'shadow-color-picker',
+        'border-color-picker',
+    ]) {
+        document.getElementById(id)?.addEventListener('change', () => {
+            reassertTokensSoon(resolveAppearance());
+        });
+    }
 
     const media = window.matchMedia('(prefers-color-scheme: light)');
     const onSystemChange = () => {
