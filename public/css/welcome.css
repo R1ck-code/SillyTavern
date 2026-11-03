@@ -10,6 +10,17 @@
     width: 100%;
 }
 
+.welcomeGreeting {
+    width: 100%;
+    text-align: center;
+}
+
+.welcomeGreeting h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
 .welcomePanel:has(.showMoreChats) {
     padding-bottom: 5px;
 }

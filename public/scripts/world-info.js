@@ -1,6 +1,6 @@
 import { Fuse } from '../lib.js';
 
-import { saveSettings, substituteParams, getRequestHeaders, chat_metadata, this_chid, characters, saveCharacterDebounced, menu_type, eventSource, event_types, getExtensionPromptByName, saveMetadata, getCurrentChatId, extension_prompt_roles, create_save, createOrEditCharacter, name1, getOneCharacter, select_selected_character } from '../script.js';
+import { saveSettings, substituteParams, getRequestHeaders, chat_metadata, this_chid, characters, saveCharacterDebounced, menu_type, eventSource, event_types, getExtensionPromptByName, saveMetadata, getCurrentChatId, extension_prompt_roles, create_save, createOrEditCharacter, name1, getOneCharacter, select_selected_character, printCharactersDebounced } from '../script.js';
 import { download, debounce, initScrollHeight, resetScrollHeight, parseJsonFile, extractDataFromPng, getFileBuffer, getCharaFilename, getSortableDelay, escapeRegex, PAGINATION_TEMPLATE, navigation_option, waitUntilCondition, isTrueBoolean, setValueByPath, flashHighlight, select2ModifyOptions, getSelect2OptionId, dynamicSelect2DataViaAjax, highlightRegex, select2ChoiceClickSubscribe, isFalseBoolean, getSanitizedFilename, checkOverwriteExistingData, getStringHash, parseStringArray, cancelDebounce, findChar, onlyUnique, equalsIgnoreCaseAndAccents, uuidv4, normalizeArray, getUniqueName, logSlashCommandWarn, addLongPressEvent, escapeHtml, setInfoBlock, clearInfoBlock } from './utils.js';
 import { extension_settings, getContext } from './extensions.js';
 import { NOTE_MODULE_NAME, metadata_keys, shouldWIAddPrompt } from './authors-note.js';
@@ -23,6 +23,7 @@ import { renderTemplateAsync } from './templates.js';
 import { t } from './i18n.js';
 import { accountStorage } from './util/AccountStorage.js';
 import { getOrCreatePersonaDescriptor, setPersonaDescription, user_avatar } from './personas.js';
+import { collectCharacterBoundWorldNames } from './character-bound-worlds.js';
 
 export const world_info_insertion_strategy = {
     evenly: 0,
@@ -6090,6 +6091,16 @@ export async function moveWorldInfoEntry(sourceName, targetName, uid, { deleteOr
 
 
 /**
+ * Returns unique world book names bound to a character (primary + auxiliary).
+ * Works with shallow list entries that only carry `data.extensions.world`.
+ * @param {object} character Character object
+ * @returns {string[]}
+ */
+export function getCharacterBoundWorldNames(character) {
+    return collectCharacterBoundWorldNames(character, world_info.charLore);
+}
+
+/**
  * Updates the primary world info linked to a character.
  * Can also unset it to null.
  * @param {string} name - The name of the world info to link to the character.
@@ -6170,6 +6181,7 @@ function updateAuxBooks(fileName, computeNext) {
 
     Object.assign(world_info, { charLore });
     saveSettingsDebounced();
+    printCharactersDebounced();
 }
 
 export function initWorldInfo() {

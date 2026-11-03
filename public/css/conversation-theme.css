@@ -63,12 +63,15 @@ html[data-appearance] {
     --fontScale: 1.06;
     --shadowWidth: 0;
     --blurStrength: 0;
+    --mainFontFamily: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif;
+    --monoFontFamily: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
 }
 
 html[data-appearance],
 html[data-appearance] body {
     background-color: var(--conv-bg);
     color: var(--conv-text);
+    font-family: var(--mainFontFamily);
 }
 
 html[data-appearance] body {
@@ -124,6 +127,13 @@ html[data-appearance] #chat .mes {
     border: none;
     background: transparent;
     border-radius: 0;
+}
+
+html[data-appearance] #chat .mes .mes_text,
+html[data-appearance] #send_textarea,
+html[data-appearance] #top-bar,
+html[data-appearance] .drawer-content {
+    font-family: var(--mainFontFamily);
 }
 
 html[data-appearance] #chat .mes .mes_text {
@@ -213,15 +223,81 @@ html[data-appearance] #right-nav-panel {
     box-shadow: var(--conv-shadow);
 }
 
-html[data-appearance] .welcomePanel {
-    padding: 28px 8px 32px;
-    gap: 12px;
+html[data-appearance] #chat:has(.welcomePanel) > .mes {
+    display: none;
 }
 
-html[data-appearance] .welcomePanel .welcomeHeaderVersionDisplay {
-    font-size: 1.45rem;
+html[data-appearance] .welcomePanel {
+    padding: 16vh 12px 32px;
+    gap: 20px;
+    align-items: center;
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+html[data-appearance] .welcomeGreeting {
+    width: 100%;
+    text-align: center;
+    padding: 8px 8px 4px;
+}
+
+html[data-appearance] .welcomeGreeting h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 4vw, 2rem);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    color: var(--conv-text);
+}
+
+html[data-appearance] .welcomePanel .welcomeHeaderLogo,
+html[data-appearance] .welcomePanel .welcomeHeaderVersionDisplay,
+html[data-appearance] .welcomePanel .welcomeShortcuts a,
+html[data-appearance] .welcomePanel .welcomeShortcutsSeparator {
+    display: none;
+}
+
+html[data-appearance] .welcomePanel .welcomeHeaderTitle {
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+}
+
+html[data-appearance] .welcomePanel .welcomeHeader {
+    width: 100%;
+    justify-content: center;
+}
+
+html[data-appearance] .welcomePanel:not(.recentHidden) .welcomeHeader {
+    justify-content: flex-end;
+}
+
+html[data-appearance] .welcomePanel .showRecentChats,
+html[data-appearance] .welcomePanel .openTemporaryChat {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--conv-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+html[data-appearance] .welcomePanel .showRecentChats:hover,
+html[data-appearance] .welcomePanel .openTemporaryChat:hover {
+    background: var(--conv-hover);
+    color: var(--conv-text);
+}
+
+html[data-appearance] .welcomePanel .recentChatsTitle {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--conv-text-muted);
 }
 
 html[data-appearance] body.bubblechat .welcomePanel {
@@ -229,15 +305,30 @@ html[data-appearance] body.bubblechat .welcomePanel {
     border: none;
 }
 
+html[data-appearance] .welcomeRecent {
+    width: 100%;
+}
+
 html[data-appearance] .welcomeRecent .recentChatList .recentChat {
-    border: 1px solid var(--conv-border);
-    background-color: var(--conv-surface);
-    border-radius: 14px;
-    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 12px;
+    padding: 10px 8px;
 }
 
 html[data-appearance] .welcomeRecent .recentChatList .recentChat:hover {
     background-color: var(--conv-hover);
+}
+
+html[data-appearance] .welcomeRecent .recentChatList .recentChat .chatStats,
+html[data-appearance] .welcomeRecent .recentChatList .recentChat .chatActions {
+    opacity: 0;
+}
+
+html[data-appearance] .welcomeRecent .recentChatList .recentChat:hover .chatStats,
+html[data-appearance] .welcomeRecent .recentChatList .recentChat:hover .chatActions,
+html[data-appearance] .welcomeRecent .recentChatList .recentChat:focus-within .chatActions {
+    opacity: 1;
 }
 
 html[data-appearance] .text_pole,
@@ -245,6 +336,16 @@ html[data-appearance] textarea,
 html[data-appearance] input,
 html[data-appearance] select {
     border-color: var(--conv-border);
+}
+
+html[data-appearance] .ch_worldbooks {
+    color: var(--conv-text-muted);
+}
+
+html[data-appearance] .ch_worldbook {
+    border-color: var(--conv-border);
+    background-color: var(--conv-hover);
+    color: var(--conv-text);
 }
 
 html[data-appearance] #appearance-toggle-wrap {

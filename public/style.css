@@ -94,8 +94,8 @@
     /*base variable calculated in rems*/
     --fontScale: 1;
     --mainFontSize: calc(var(--fontScale) * 15px);
-    --mainFontFamily: "Noto Sans", sans-serif;
-    --monoFontFamily: 'Noto Sans Mono', 'Courier New', Consolas, monospace;
+    --mainFontFamily: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif;
+    --monoFontFamily: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
 
     /* base variable for blur strength slider calculations */
     --blurStrength: 10;
@@ -3341,6 +3341,44 @@ input[type=search]:focus::-webkit-search-cancel-button {
     overflow: hidden;
     width: 100%;
     margin-top: -5px;
+}
+
+.ch_worldbooks {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    margin-top: 2px;
+    color: var(--SmartThemeEmColor);
+    font-size: calc(var(--mainFontSize) * 0.78);
+}
+
+.ch_worldbooks > i {
+    flex: 0 0 auto;
+    opacity: 0.8;
+}
+
+.ch_worldbook_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    min-width: 0;
+    overflow: hidden;
+    max-height: 2.4em;
+}
+
+.ch_worldbook {
+    display: inline-block;
+    max-width: 12em;
+    padding: 0 6px;
+    border-radius: 999px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    background-color: color-mix(in srgb, var(--SmartThemeQuoteColor) 12%, transparent);
+    color: var(--SmartThemeBodyColor);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;
 }
 
 .mes_block .ch_name {

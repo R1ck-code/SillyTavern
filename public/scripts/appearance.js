@@ -22,6 +22,7 @@ const TOKEN_SETS = {
         '--SmartThemeShadowColor': 'transparent',
         '--blurStrength': '0',
         '--shadowWidth': '0',
+        '--mainFontFamily': '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif',
     },
     light: {
         '--SmartThemeBodyColor': '#111111',
@@ -35,6 +36,7 @@ const TOKEN_SETS = {
         '--SmartThemeShadowColor': 'transparent',
         '--blurStrength': '0',
         '--shadowWidth': '0',
+        '--mainFontFamily': '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif',
     },
 };
 
