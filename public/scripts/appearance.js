@@ -5,7 +5,7 @@ export const APPEARANCE_THEMES = {
 };
 
 const THEME_COLORS = {
-    light: '#f7f7f4',
+    light: '#fafaf9',
     dark: '#212121',
 };
 
@@ -26,16 +26,16 @@ const TOKEN_SETS = {
         '--mainFontFamily': '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif',
     },
     light: {
-        '--SmartThemeBodyColor': '#111111',
-        '--SmartThemeEmColor': '#5c5c5c',
-        '--SmartThemeQuoteColor': '#b45309',
-        '--SmartThemeBlurTintColor': '#f7f7f4',
+        '--SmartThemeBodyColor': '#1a1a1a',
+        '--SmartThemeEmColor': '#57534e',
+        '--SmartThemeQuoteColor': '#44403c',
+        '--SmartThemeBlurTintColor': '#fafaf9',
         '--SmartThemeChatTintColor': '#ffffff',
-        '--SmartThemeUserMesBlurTintColor': '#edede8',
+        '--SmartThemeUserMesBlurTintColor': '#f4f4f5',
         '--SmartThemeBotMesBlurTintColor': 'transparent',
-        '--SmartThemeBorderColor': 'rgba(0, 0, 0, 0.08)',
+        '--SmartThemeBorderColor': 'rgba(24, 24, 27, 0.08)',
         '--SmartThemeShadowColor': 'transparent',
-        '--SmartThemeUnderlineColor': '#2e5c4a',
+        '--SmartThemeUnderlineColor': '#4f46e5',
         '--blurStrength': '0',
         '--shadowWidth': '0',
         '--mainFontFamily': '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif',
