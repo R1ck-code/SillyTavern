@@ -19,15 +19,17 @@ html[data-appearance="dark"] {
     --conv-hover: rgba(255, 255, 255, 0.06);
     --conv-topbar: rgba(33, 33, 33, 0.92);
     --conv-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    --SmartThemeBodyColor: #ececec;
-    --SmartThemeEmColor: #9b9b9b;
-    --SmartThemeQuoteColor: #d4a85a;
-    --SmartThemeBlurTintColor: #212121;
-    --SmartThemeChatTintColor: #212121;
-    --SmartThemeUserMesBlurTintColor: #303030;
-    --SmartThemeBotMesBlurTintColor: transparent;
-    --SmartThemeBorderColor: rgba(255, 255, 255, 0.08);
-    --SmartThemeShadowColor: transparent;
+    /* !important beats UI-theme inline vars so 外观 and 对话 cannot fight. */
+    --SmartThemeBodyColor: #ececec !important;
+    --SmartThemeEmColor: #9b9b9b !important;
+    --SmartThemeQuoteColor: #d4a85a !important;
+    --SmartThemeUnderlineColor: #c4d6c9 !important;
+    --SmartThemeBlurTintColor: #212121 !important;
+    --SmartThemeChatTintColor: #212121 !important;
+    --SmartThemeUserMesBlurTintColor: #303030 !important;
+    --SmartThemeBotMesBlurTintColor: transparent !important;
+    --SmartThemeBorderColor: rgba(255, 255, 255, 0.08) !important;
+    --SmartThemeShadowColor: transparent !important;
     color-scheme: dark;
 }
 
@@ -46,15 +48,17 @@ html[data-appearance="light"] {
     --conv-hover: rgba(0, 0, 0, 0.04);
     --conv-topbar: rgba(247, 247, 244, 0.92);
     --conv-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-    --SmartThemeBodyColor: #111111;
-    --SmartThemeEmColor: #5c5c5c;
-    --SmartThemeQuoteColor: #b45309;
-    --SmartThemeBlurTintColor: #f7f7f4;
-    --SmartThemeChatTintColor: #ffffff;
-    --SmartThemeUserMesBlurTintColor: #edede8;
-    --SmartThemeBotMesBlurTintColor: transparent;
-    --SmartThemeBorderColor: rgba(0, 0, 0, 0.08);
-    --SmartThemeShadowColor: transparent;
+    /* !important beats UI-theme inline vars so 外观 and 对话 cannot fight. */
+    --SmartThemeBodyColor: #111111 !important;
+    --SmartThemeEmColor: #5c5c5c !important;
+    --SmartThemeQuoteColor: #b45309 !important;
+    --SmartThemeUnderlineColor: #2e5c4a !important;
+    --SmartThemeBlurTintColor: #f7f7f4 !important;
+    --SmartThemeChatTintColor: #ffffff !important;
+    --SmartThemeUserMesBlurTintColor: #edede8 !important;
+    --SmartThemeBotMesBlurTintColor: transparent !important;
+    --SmartThemeBorderColor: rgba(0, 0, 0, 0.08) !important;
+    --SmartThemeShadowColor: transparent !important;
     color-scheme: light;
 }
 
@@ -87,6 +91,11 @@ html[data-appearance] #bg_custom {
     background-image: none !important;
     background-color: var(--conv-bg) !important;
     filter: none;
+}
+
+html[data-appearance] #top-bar,
+html[data-appearance] #top-settings-holder {
+    color: var(--conv-text);
 }
 
 html[data-appearance] #top-bar {
@@ -137,6 +146,7 @@ html[data-appearance] .drawer-content {
 }
 
 html[data-appearance] #chat .mes .mes_text {
+    color: var(--conv-text);
     font-size: 1.05rem;
     line-height: 1.65;
     font-weight: 400;
@@ -221,6 +231,7 @@ html[data-appearance] #right-nav-panel {
     background-color: var(--conv-elevated);
     border-color: var(--conv-border);
     box-shadow: var(--conv-shadow);
+    color: var(--conv-text);
 }
 
 html[data-appearance] #chat:has(.welcomePanel) > .mes {
