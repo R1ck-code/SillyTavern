@@ -305,7 +305,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    background: rgba(0, 0, 0, 0.72);
     color: var(--SmartThemeBodyColor);
     font-size: 0.9em;
     font-weight: 600;
@@ -452,7 +452,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+    background: rgba(0, 0, 0, 0.72);
     color: var(--SmartThemeBodyColor);
     padding: 6px 8px 4px;
     display: flex;

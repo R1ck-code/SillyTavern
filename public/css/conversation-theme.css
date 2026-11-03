@@ -447,6 +447,51 @@ html[data-appearance] #appearance-settings-block {
     margin-top: 8px;
 }
 
+/* Flat section chrome. No metallic or fade bars in light or dark. */
+html[data-appearance] .standoutHeader,
+html[data-appearance] #user-settings-block h4,
+html[data-appearance] #extensions_settings .inline-drawer-toggle.inline-drawer-header,
+html[data-appearance] #extensions_settings2 .inline-drawer-toggle.inline-drawer-header,
+html[data-appearance] .select2-container--classic .select2-selection--single,
+html[data-appearance] .select2-container--classic .select2-selection--single .select2-selection__arrow {
+    background-image: none !important;
+    background-color: var(--conv-surface) !important;
+    color: var(--conv-text);
+    border-color: var(--conv-border);
+    filter: none;
+    box-shadow: none;
+}
+
+html[data-appearance] .standoutHeader.inline-drawer-header:hover,
+html[data-appearance] #extensions_settings .inline-drawer-toggle.inline-drawer-header:hover,
+html[data-appearance] #extensions_settings2 .inline-drawer-toggle.inline-drawer-header:hover,
+html[data-appearance] .select2-container--classic.select2-container--open .select2-selection--single {
+    filter: none;
+    background-image: none !important;
+    background-color: var(--conv-hover) !important;
+}
+
+html[data-appearance] .standoutHeader ~ .inline-drawer-content,
+html[data-appearance] hr,
+html[data-appearance] #completion_prompt_manager .completion_prompt_manager_list_separator hr {
+    background-image: none !important;
+    background-color: transparent;
+    border-color: var(--conv-border);
+}
+
+html[data-appearance] hr,
+html[data-appearance] #completion_prompt_manager .completion_prompt_manager_list_separator hr {
+    background-color: var(--conv-border);
+    opacity: 1;
+}
+
+html[data-appearance] .menu_button,
+html[data-appearance] #top-bar,
+html[data-appearance] #send_form,
+html[data-appearance] .drawer-content {
+    background-image: none;
+}
+
 @media screen and (min-width: 769px) {
     html[data-appearance] #chat {
         padding: 20px 28px 36px;
