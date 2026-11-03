@@ -20,6 +20,7 @@ const TOKEN_SETS = {
         '--SmartThemeBotMesBlurTintColor': 'transparent',
         '--SmartThemeBorderColor': 'rgba(255, 255, 255, 0.08)',
         '--SmartThemeShadowColor': 'transparent',
+        '--SmartThemeUnderlineColor': '#c4d6c9',
         '--blurStrength': '0',
         '--shadowWidth': '0',
         '--mainFontFamily': '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif',
@@ -34,6 +35,7 @@ const TOKEN_SETS = {
         '--SmartThemeBotMesBlurTintColor': 'transparent',
         '--SmartThemeBorderColor': 'rgba(0, 0, 0, 0.08)',
         '--SmartThemeShadowColor': 'transparent',
+        '--SmartThemeUnderlineColor': '#2e5c4a',
         '--blurStrength': '0',
         '--shadowWidth': '0',
         '--mainFontFamily': '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "Droid Sans Fallback", "Helvetica Neue", sans-serif',
@@ -140,7 +142,13 @@ export function applyAppearance(mode = getStoredAppearanceMode(), { persist = tr
 
     if (applyBuiltinTheme) {
         syncBuiltinTheme(resolved);
+        // applyTheme writes inline colors; put appearance tokens back on top.
+        applyColorTokens(resolved);
     }
+
+    // Color pickers emit `change` after load/theme swap; re-assert once they settle.
+    clearTimeout(applyAppearance._tokenTimer);
+    applyAppearance._tokenTimer = setTimeout(() => applyColorTokens(resolved), 0);
 }
 
 function cycleAppearance() {
@@ -207,13 +215,16 @@ export function initAppearance() {
             applyAppearance('light', { persist: true, applyBuiltinTheme: false });
         } else if (selected === APPEARANCE_THEMES.dark) {
             applyAppearance('dark', { persist: true, applyBuiltinTheme: false });
+        } else {
+            // Third-party UI themes still get appearance tokens so text cannot vanish.
+            applyAppearance(getStoredAppearanceMode(), { persist: false, applyBuiltinTheme: false });
         }
     });
 
     const media = window.matchMedia('(prefers-color-scheme: light)');
     const onSystemChange = () => {
         if (getStoredAppearanceMode() === 'system') {
-            applyAppearance('system', { persist: false, applyBuiltinTheme: false });
+            applyAppearance('system', { persist: false, applyBuiltinTheme: true });
         }
     };
     if (typeof media.addEventListener === 'function') {

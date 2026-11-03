@@ -7990,7 +7990,7 @@ export async function getSettings(initLoaderHandle = null) {
 
         // Apply theme toggles from power user settings
         applyPowerUserSettings();
-        applyAppearance(getStoredAppearanceMode(), { persist: false, applyBuiltinTheme: false });
+        applyAppearance(getStoredAppearanceMode(), { persist: false, applyBuiltinTheme: true });
 
         // Load character tags
         loadTagsSettings(settings);
