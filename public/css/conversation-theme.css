@@ -34,31 +34,32 @@ html[data-appearance="dark"] {
 }
 
 html[data-appearance="light"] {
-    --conv-bg: #fafaf9;
-    --conv-surface: #ffffff;
-    --conv-elevated: #ffffff;
-    --conv-text: #1a1a1a;
-    --conv-text-muted: #6b7280;
-    --conv-quote: #44403c;
-    --conv-accent: #4f46e5;
-    --conv-user-bubble: #f4f4f5;
+    /* Claude Mobbin palette only: accent / white / page / muted + near-black text. */
+    --conv-bg: #F4F3EE;
+    --conv-surface: #FFFFFF;
+    --conv-elevated: #FFFFFF;
+    --conv-text: #1F1E1D;
+    --conv-text-muted: #B1ADA1;
+    --conv-quote: #C15F3C;
+    --conv-accent: #C15F3C;
+    --conv-user-bubble: #FFFFFF;
     --conv-bot-bubble: transparent;
-    --conv-border: rgba(24, 24, 27, 0.08);
-    --conv-input: #ffffff;
-    --conv-input-border: rgba(24, 24, 27, 0.10);
-    --conv-hover: rgba(24, 24, 27, 0.045);
-    --conv-topbar: rgba(250, 250, 249, 0.88);
-    --conv-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
+    --conv-border: #B1ADA1;
+    --conv-input: #FFFFFF;
+    --conv-input-border: #B1ADA1;
+    --conv-hover: rgba(177, 173, 161, 0.22);
+    --conv-topbar: rgba(244, 243, 238, 0.92);
+    --conv-shadow: 0 1px 2px rgba(177, 173, 161, 0.28);
     /* !important beats UI-theme inline vars so 外观 and 对话 cannot fight. */
-    --SmartThemeBodyColor: #1a1a1a !important;
-    --SmartThemeEmColor: #57534e !important;
-    --SmartThemeQuoteColor: #44403c !important;
-    --SmartThemeUnderlineColor: #4f46e5 !important;
-    --SmartThemeBlurTintColor: #fafaf9 !important;
-    --SmartThemeChatTintColor: #ffffff !important;
-    --SmartThemeUserMesBlurTintColor: #f4f4f5 !important;
+    --SmartThemeBodyColor: #1F1E1D !important;
+    --SmartThemeEmColor: #1F1E1D !important;
+    --SmartThemeQuoteColor: #C15F3C !important;
+    --SmartThemeUnderlineColor: #C15F3C !important;
+    --SmartThemeBlurTintColor: #F4F3EE !important;
+    --SmartThemeChatTintColor: #FFFFFF !important;
+    --SmartThemeUserMesBlurTintColor: #FFFFFF !important;
     --SmartThemeBotMesBlurTintColor: transparent !important;
-    --SmartThemeBorderColor: rgba(24, 24, 27, 0.08) !important;
+    --SmartThemeBorderColor: #B1ADA1 !important;
     --SmartThemeShadowColor: transparent !important;
     color-scheme: light;
 }
@@ -361,7 +362,7 @@ html[data-appearance="light"] a:not(.menu_button):not(.drawer-icon) {
 html[data-appearance="light"] .drawer-content,
 html[data-appearance="light"] #left-nav-panel,
 html[data-appearance="light"] #right-nav-panel {
-    box-shadow: 0 10px 32px rgba(24, 24, 27, 0.06);
+    box-shadow: 0 10px 32px rgba(177, 173, 161, 0.28);
 }
 
 html[data-appearance="light"] .neo-range-slider,
