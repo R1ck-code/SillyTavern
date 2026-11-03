@@ -34,30 +34,32 @@ html[data-appearance="dark"] {
 }
 
 html[data-appearance="light"] {
-    --conv-bg: #f7f7f4;
-    --conv-surface: #ffffff;
-    --conv-elevated: #ffffff;
-    --conv-text: #111111;
-    --conv-text-muted: #5c5c5c;
-    --conv-quote: #b45309;
-    --conv-user-bubble: #edede8;
+    /* Claude Mobbin palette only: accent / white / page / muted + near-black text. */
+    --conv-bg: #F4F3EE;
+    --conv-surface: #FFFFFF;
+    --conv-elevated: #FFFFFF;
+    --conv-text: #1F1E1D;
+    --conv-text-muted: #B1ADA1;
+    --conv-quote: #C15F3C;
+    --conv-accent: #C15F3C;
+    --conv-user-bubble: #FFFFFF;
     --conv-bot-bubble: transparent;
-    --conv-border: rgba(0, 0, 0, 0.08);
-    --conv-input: #ffffff;
-    --conv-input-border: rgba(0, 0, 0, 0.10);
-    --conv-hover: rgba(0, 0, 0, 0.04);
-    --conv-topbar: rgba(247, 247, 244, 0.92);
-    --conv-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --conv-border: #B1ADA1;
+    --conv-input: #FFFFFF;
+    --conv-input-border: #B1ADA1;
+    --conv-hover: rgba(177, 173, 161, 0.22);
+    --conv-topbar: rgba(244, 243, 238, 0.92);
+    --conv-shadow: 0 1px 2px rgba(177, 173, 161, 0.28);
     /* !important beats UI-theme inline vars so 外观 and 对话 cannot fight. */
-    --SmartThemeBodyColor: #111111 !important;
-    --SmartThemeEmColor: #5c5c5c !important;
-    --SmartThemeQuoteColor: #b45309 !important;
-    --SmartThemeUnderlineColor: #2e5c4a !important;
-    --SmartThemeBlurTintColor: #f7f7f4 !important;
-    --SmartThemeChatTintColor: #ffffff !important;
-    --SmartThemeUserMesBlurTintColor: #edede8 !important;
+    --SmartThemeBodyColor: #1F1E1D !important;
+    --SmartThemeEmColor: #1F1E1D !important;
+    --SmartThemeQuoteColor: #C15F3C !important;
+    --SmartThemeUnderlineColor: #C15F3C !important;
+    --SmartThemeBlurTintColor: #F4F3EE !important;
+    --SmartThemeChatTintColor: #FFFFFF !important;
+    --SmartThemeUserMesBlurTintColor: #FFFFFF !important;
     --SmartThemeBotMesBlurTintColor: transparent !important;
-    --SmartThemeBorderColor: rgba(0, 0, 0, 0.08) !important;
+    --SmartThemeBorderColor: #B1ADA1 !important;
     --SmartThemeShadowColor: transparent !important;
     color-scheme: light;
 }
@@ -148,16 +150,19 @@ html[data-appearance] .drawer-content {
 html[data-appearance] #chat .mes .mes_text {
     color: var(--conv-text);
     font-size: 1.05rem;
-    line-height: 1.65;
+    line-height: 1.7;
     font-weight: 400;
+    letter-spacing: -0.011em;
     padding: 2px 4px;
     max-width: 46rem;
 }
 
 html[data-appearance] #chat .mes[is_user="true"] .mes_text {
     background-color: var(--conv-user-bubble);
-    border-radius: 18px;
-    padding: 10px 16px;
+    border: 1px solid var(--conv-border);
+    border-radius: 20px;
+    padding: 12px 18px;
+    box-shadow: var(--conv-shadow);
 }
 
 html[data-appearance] body.bubblechat #chat .mes {
@@ -206,11 +211,11 @@ html[data-appearance] #form_sheld {
 html[data-appearance] #send_form,
 html[data-appearance] #send_form.compact {
     border: 1px solid var(--conv-input-border) !important;
-    border-radius: 24px;
+    border-radius: 26px;
     background-color: var(--conv-input) !important;
     box-shadow: var(--conv-shadow);
     min-height: 48px;
-    padding: 4px 8px;
+    padding: 6px 10px;
 }
 
 html[data-appearance] #send_textarea {
@@ -347,6 +352,22 @@ html[data-appearance] textarea,
 html[data-appearance] input,
 html[data-appearance] select {
     border-color: var(--conv-border);
+    background-color: var(--conv-surface);
+}
+
+html[data-appearance="light"] a:not(.menu_button):not(.drawer-icon) {
+    color: var(--conv-accent);
+}
+
+html[data-appearance="light"] .drawer-content,
+html[data-appearance="light"] #left-nav-panel,
+html[data-appearance="light"] #right-nav-panel {
+    box-shadow: 0 10px 32px rgba(177, 173, 161, 0.28);
+}
+
+html[data-appearance="light"] .neo-range-slider,
+html[data-appearance="light"] input[type="range"] {
+    accent-color: var(--conv-accent);
 }
 
 html[data-appearance] .ch_worldbooks {
@@ -424,6 +445,51 @@ html[data-appearance] #appearance-menu button.is-active {
 
 html[data-appearance] #appearance-settings-block {
     margin-top: 8px;
+}
+
+/* Flat section chrome. No metallic or fade bars in light or dark. */
+html[data-appearance] .standoutHeader,
+html[data-appearance] #user-settings-block h4,
+html[data-appearance] #extensions_settings .inline-drawer-toggle.inline-drawer-header,
+html[data-appearance] #extensions_settings2 .inline-drawer-toggle.inline-drawer-header,
+html[data-appearance] .select2-container--classic .select2-selection--single,
+html[data-appearance] .select2-container--classic .select2-selection--single .select2-selection__arrow {
+    background-image: none !important;
+    background-color: var(--conv-surface) !important;
+    color: var(--conv-text);
+    border-color: var(--conv-border);
+    filter: none;
+    box-shadow: none;
+}
+
+html[data-appearance] .standoutHeader.inline-drawer-header:hover,
+html[data-appearance] #extensions_settings .inline-drawer-toggle.inline-drawer-header:hover,
+html[data-appearance] #extensions_settings2 .inline-drawer-toggle.inline-drawer-header:hover,
+html[data-appearance] .select2-container--classic.select2-container--open .select2-selection--single {
+    filter: none;
+    background-image: none !important;
+    background-color: var(--conv-hover) !important;
+}
+
+html[data-appearance] .standoutHeader ~ .inline-drawer-content,
+html[data-appearance] hr,
+html[data-appearance] #completion_prompt_manager .completion_prompt_manager_list_separator hr {
+    background-image: none !important;
+    background-color: transparent;
+    border-color: var(--conv-border);
+}
+
+html[data-appearance] hr,
+html[data-appearance] #completion_prompt_manager .completion_prompt_manager_list_separator hr {
+    background-color: var(--conv-border);
+    opacity: 1;
+}
+
+html[data-appearance] .menu_button,
+html[data-appearance] #top-bar,
+html[data-appearance] #send_form,
+html[data-appearance] .drawer-content {
+    background-image: none;
 }
 
 @media screen and (min-width: 769px) {

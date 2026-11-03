@@ -21,7 +21,7 @@
                     : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
                 document.documentElement.dataset.appearance = resolved;
                 document.documentElement.dataset.appearanceMode = mode;
-                document.documentElement.style.backgroundColor = resolved === 'light' ? '#f7f7f4' : '#212121';
+                document.documentElement.style.backgroundColor = resolved === 'light' ? '#F4F3EE' : '#212121';
             } catch (e) { /* ignore */ }
         })();
     </script>
@@ -31,7 +31,7 @@
             background-color: rgb(33, 33, 33);
         }
         html[data-appearance="light"] body {
-            background-color: #f7f7f4;
+            background-color: #F4F3EE;
         }
     </style>
     <link rel="preload" as="style" href="style.css">
