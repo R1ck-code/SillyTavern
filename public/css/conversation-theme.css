@@ -1,0 +1,336 @@
+/*
+ * Fork conversation surface: ChatGPT / Claude-like chrome for desktop AND mobile.
+ * Colors are driven by html[data-appearance="light"|"dark"] (see appearance.js).
+ * Safe-area / iPhone layout leftovers stay in mobile-chat-theme.css.
+ */
+
+html[data-appearance="dark"] {
+    --conv-bg: #212121;
+    --conv-surface: #212121;
+    --conv-elevated: #2a2a2a;
+    --conv-text: #ececec;
+    --conv-text-muted: #9b9b9b;
+    --conv-quote: #d4a85a;
+    --conv-user-bubble: #303030;
+    --conv-bot-bubble: transparent;
+    --conv-border: rgba(255, 255, 255, 0.08);
+    --conv-input: #2f2f2f;
+    --conv-input-border: rgba(255, 255, 255, 0.10);
+    --conv-hover: rgba(255, 255, 255, 0.06);
+    --conv-topbar: rgba(33, 33, 33, 0.92);
+    --conv-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --SmartThemeBodyColor: #ececec;
+    --SmartThemeEmColor: #9b9b9b;
+    --SmartThemeQuoteColor: #d4a85a;
+    --SmartThemeBlurTintColor: #212121;
+    --SmartThemeChatTintColor: #212121;
+    --SmartThemeUserMesBlurTintColor: #303030;
+    --SmartThemeBotMesBlurTintColor: transparent;
+    --SmartThemeBorderColor: rgba(255, 255, 255, 0.08);
+    --SmartThemeShadowColor: transparent;
+    color-scheme: dark;
+}
+
+html[data-appearance="light"] {
+    --conv-bg: #f7f7f4;
+    --conv-surface: #ffffff;
+    --conv-elevated: #ffffff;
+    --conv-text: #111111;
+    --conv-text-muted: #5c5c5c;
+    --conv-quote: #b45309;
+    --conv-user-bubble: #edede8;
+    --conv-bot-bubble: transparent;
+    --conv-border: rgba(0, 0, 0, 0.08);
+    --conv-input: #ffffff;
+    --conv-input-border: rgba(0, 0, 0, 0.10);
+    --conv-hover: rgba(0, 0, 0, 0.04);
+    --conv-topbar: rgba(247, 247, 244, 0.92);
+    --conv-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --SmartThemeBodyColor: #111111;
+    --SmartThemeEmColor: #5c5c5c;
+    --SmartThemeQuoteColor: #b45309;
+    --SmartThemeBlurTintColor: #f7f7f4;
+    --SmartThemeChatTintColor: #ffffff;
+    --SmartThemeUserMesBlurTintColor: #edede8;
+    --SmartThemeBotMesBlurTintColor: transparent;
+    --SmartThemeBorderColor: rgba(0, 0, 0, 0.08);
+    --SmartThemeShadowColor: transparent;
+    color-scheme: light;
+}
+
+html[data-appearance] {
+    --sheldWidth: min(52rem, 100vw);
+    --fontScale: 1.06;
+    --shadowWidth: 0;
+    --blurStrength: 0;
+}
+
+html[data-appearance],
+html[data-appearance] body {
+    background-color: var(--conv-bg);
+    color: var(--conv-text);
+}
+
+html[data-appearance] body {
+    color-scheme: inherit;
+}
+
+html[data-appearance] * {
+    text-shadow: none;
+}
+
+html[data-appearance] #bg1,
+html[data-appearance] #bg_custom {
+    background-image: none !important;
+    background-color: var(--conv-bg) !important;
+    filter: none;
+}
+
+html[data-appearance] #top-bar {
+    width: 100vw;
+    max-width: 100vw;
+    background-color: var(--conv-topbar) !important;
+    box-shadow: none;
+    border-bottom: 1px solid var(--conv-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+html[data-appearance] #top-settings-holder {
+    width: min(52rem, 100vw);
+    background: transparent;
+}
+
+html[data-appearance] #sheld {
+    width: min(52rem, 100%);
+    max-width: 52rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background: transparent;
+}
+
+html[data-appearance] #chat {
+    border: none;
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 12px 20px 28px;
+}
+
+html[data-appearance] #chat .mes {
+    padding: 10px 4px 14px;
+    margin-bottom: 2px;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+}
+
+html[data-appearance] #chat .mes .mes_text {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    font-weight: 400;
+    padding: 2px 4px;
+    max-width: 46rem;
+}
+
+html[data-appearance] #chat .mes[is_user="true"] .mes_text {
+    background-color: var(--conv-user-bubble);
+    border-radius: 18px;
+    padding: 10px 16px;
+}
+
+html[data-appearance] body.bubblechat #chat .mes {
+    border: none;
+    background-color: transparent;
+    border-radius: 0;
+    margin-bottom: 4px;
+    padding: 8px 4px 12px;
+}
+
+html[data-appearance] body.bubblechat #chat .mes[is_user="true"] {
+    background-color: transparent;
+}
+
+html[data-appearance] body.bubblechat #chat .mes[is_user="true"] .mes_text {
+    background-color: var(--conv-user-bubble);
+}
+
+html[data-appearance] body.bubblechat #chat .mes:not([is_user="true"]) .mes_text {
+    background: transparent;
+    padding: 2px 4px;
+}
+
+html[data-appearance] #chat .mes.smallSysMes .mes_text {
+    background: transparent;
+    color: var(--conv-text-muted);
+    font-size: 0.85rem;
+}
+
+html[data-appearance] #chat .mes .mes_block .ch_name {
+    color: var(--conv-text-muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+html[data-appearance] #chat .mes .avatar img {
+    box-shadow: none;
+    border: none;
+}
+
+html[data-appearance] #form_sheld {
+    padding: 0 16px 12px;
+    background: transparent;
+}
+
+html[data-appearance] #send_form,
+html[data-appearance] #send_form.compact {
+    border: 1px solid var(--conv-input-border) !important;
+    border-radius: 24px;
+    background-color: var(--conv-input) !important;
+    box-shadow: var(--conv-shadow);
+    min-height: 48px;
+    padding: 4px 8px;
+}
+
+html[data-appearance] #send_textarea {
+    font-size: 16px;
+    line-height: 1.45;
+    text-align: left;
+    color: var(--conv-text);
+}
+
+html[data-appearance] #send_textarea::placeholder {
+    text-align: left !important;
+    color: var(--conv-text-muted) !important;
+}
+
+html[data-appearance] .drawer-content,
+html[data-appearance] #left-nav-panel,
+html[data-appearance] #right-nav-panel {
+    background-color: var(--conv-elevated);
+    border-color: var(--conv-border);
+    box-shadow: var(--conv-shadow);
+}
+
+html[data-appearance] .welcomePanel {
+    padding: 28px 8px 32px;
+    gap: 12px;
+}
+
+html[data-appearance] .welcomePanel .welcomeHeaderVersionDisplay {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+html[data-appearance] body.bubblechat .welcomePanel {
+    background: transparent;
+    border: none;
+}
+
+html[data-appearance] .welcomeRecent .recentChatList .recentChat {
+    border: 1px solid var(--conv-border);
+    background-color: var(--conv-surface);
+    border-radius: 14px;
+    padding: 10px 12px;
+}
+
+html[data-appearance] .welcomeRecent .recentChatList .recentChat:hover {
+    background-color: var(--conv-hover);
+}
+
+html[data-appearance] .text_pole,
+html[data-appearance] textarea,
+html[data-appearance] input,
+html[data-appearance] select {
+    border-color: var(--conv-border);
+}
+
+html[data-appearance] #appearance-toggle-wrap {
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+}
+
+html[data-appearance] #appearance-toggle-button {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--topBarIconSize);
+}
+
+html[data-appearance] #appearance-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 4000;
+    min-width: 10.5rem;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--conv-border);
+    background: var(--conv-elevated);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+html[data-appearance] #appearance-menu.hidden {
+    display: none;
+}
+
+html[data-appearance] #appearance-menu button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--conv-text);
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+html[data-appearance] #appearance-menu button:hover,
+html[data-appearance] #appearance-menu button.is-active {
+    background: var(--conv-hover);
+}
+
+html[data-appearance] #appearance-settings-block {
+    margin-top: 8px;
+}
+
+@media screen and (min-width: 769px) {
+    html[data-appearance] #chat {
+        padding: 20px 28px 36px;
+    }
+
+    html[data-appearance] #chat .mes .mes_text {
+        font-size: 1.08rem;
+        line-height: 1.7;
+    }
+
+    html[data-appearance] #form_sheld {
+        padding: 0 20px 16px;
+    }
+
+    html[data-appearance] #send_form,
+    html[data-appearance] #send_form.compact {
+        max-width: 46rem;
+        margin: 0 auto;
+    }
+}

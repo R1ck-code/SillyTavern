@@ -231,6 +231,7 @@ import {
     getInstructStoppingSequences,
 } from './scripts/instruct-mode.js';
 import { initLocales, t } from './scripts/i18n.js';
+import { initAppearance, applyAppearance, getStoredAppearanceMode } from './scripts/appearance.js';
 import { getFriendlyTokenizerName, getTokenCount, getTokenCountAsync, initTokenizers, saveTokenCache } from './scripts/tokenizers.js';
 import {
     user_avatar,
@@ -736,6 +737,7 @@ async function firstLoadInit() {
     await initSecrets();
     await readSecretState();
     await initLocales();
+    initAppearance();
     initChatUtilities();
     initDefaultSlashCommands();
     initTextGenModels();
@@ -7968,6 +7970,7 @@ export async function getSettings(initLoaderHandle = null) {
 
         // Apply theme toggles from power user settings
         applyPowerUserSettings();
+        applyAppearance(getStoredAppearanceMode(), { persist: false, applyBuiltinTheme: false });
 
         // Load character tags
         loadTagsSettings(settings);

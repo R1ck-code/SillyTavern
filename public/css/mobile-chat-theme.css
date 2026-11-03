@@ -82,39 +82,12 @@
     #chat .mes .mes_text {
         font-size: 1.05rem;
         line-height: 1.6;
-        font-weight: 400;
-        padding: 10px 14px;
-        border-radius: 18px;
-        background-color: color-mix(in srgb, var(--SmartThemeBotMesBlurTintColor) 82%, transparent);
         max-width: 100%;
     }
 
-    #chat .mes[is_user="true"] .mes_text {
-        background-color: color-mix(in srgb, var(--SmartThemeUserMesBlurTintColor) 88%, var(--SmartThemeBlurTintColor) 12%);
-    }
-
     #chat .mes.smallSysMes .mes_text {
-        background: transparent;
         padding: 4px 8px;
         font-size: 0.85rem;
-        opacity: 0.8;
-    }
-
-    body.bubblechat #chat .mes {
-        border: none;
-        border-radius: 18px;
-        background-color: color-mix(in srgb, var(--SmartThemeBotMesBlurTintColor) 70%, transparent);
-        padding: 8px 10px;
-        margin-bottom: 8px;
-    }
-
-    body.bubblechat #chat .mes[is_user="true"] {
-        background-color: color-mix(in srgb, var(--SmartThemeUserMesBlurTintColor) 80%, transparent);
-    }
-
-    body.bubblechat #chat .mes .mes_text {
-        background: transparent;
-        padding: 6px 4px 4px;
     }
 
     body.documentstyle #chat .mes .mes_text {
