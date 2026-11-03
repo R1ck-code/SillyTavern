@@ -618,6 +618,49 @@ export function getUniqueName(baseName, exists, { nameBuilder = null, maxTries =
 }
 
 /**
+ * Display-name family used when duplicating a character card.
+ * First copy is "Name 副本"; further collisions follow existing getUniqueName style: "Name 副本 (2)".
+ * If the source already ends with " 副本" or " 副本 (N)", the suffix is stripped so copies stay in one family.
+ */
+const COPY_NAME_FAMILY_RE = / 副本(?: \((\d+)\))?$/u;
+
+/**
+ * Build a unique display name for a duplicated character.
+ * Always returns a name different from `originalName` when that name is in `existingNames`.
+ * @param {string} originalName Source character display name
+ * @param {Iterable<string>|Set<string>|null|undefined} existingNames Names that are already taken
+ * @returns {string} Unique copy name
+ */
+export function getUniqueCopyName(originalName, existingNames) {
+    const source = String(originalName ?? '').trim();
+    const base = (source.replace(COPY_NAME_FAMILY_RE, '').trim()) || source || 'Character';
+    const first = `${base} 副本`;
+    const taken = existingNames instanceof Set ? existingNames : new Set(existingNames ?? []);
+    if (!taken.has(first)) {
+        return first;
+    }
+    return getUniqueName(first, (name) => taken.has(name), { startIndex: 2 }) ?? `${first} (${Date.now()})`;
+}
+
+/**
+ * Apply a unique duplicate display name to a character card object (V1 `name` and V2 `data.name`).
+ * @param {object} card Character card JSON
+ * @param {Iterable<string>|Set<string>|null|undefined} existingNames Names that are already taken
+ * @returns {string} The name that was applied
+ */
+export function applyUniqueCopyName(card, existingNames) {
+    const original = card?.data?.name || card?.name || '';
+    const next = getUniqueCopyName(original, existingNames);
+    if (card && typeof card === 'object') {
+        card.name = next;
+        if (card.data && typeof card.data === 'object') {
+            card.data.name = next;
+        }
+    }
+    return next;
+}
+
+/**
  * Provides safe replacements for characters in filenames. Intended for use with sanitize() from the sanitize-filename package.
  * @param {string} char Character to sanitize
  * @returns {string} Safe replacement character
